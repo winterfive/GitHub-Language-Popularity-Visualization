@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    </head>
+    <body>
+        <!-- Need initial placeholder graph --> 
+        <svg id="canvas" height="800px" width="800px"></svg>
+        <script src="display.js"></script>
+
+        <form action="{{ url_for('lookup') }}" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <table>
+                        {% for something in sometings %}
+                            <tr>
+                                <td><button type="submit" name=lang_name value="{{ something[loop.index0] }}"></td>
+                            </tr>
+                        {% endfor %}
+                </div>
+            </fieldset>
+        </form>
+    </body>
+</html>
