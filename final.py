@@ -1,45 +1,62 @@
 #!/usr/bin/env python3
 
-import requests
+import os
+import re
 from flask import Flask, jsonify, render_template, request, url_for
-from cs50 import SQL
-from helpers import lookup
+from flask_jsglue import JSGlue
+import requests
 
-def main():
-    
-    """ This program creates a graph on which the user can plot the popularity (usage) 
-        of specific programming languages on GitHub."""
-    
-    """ Create an empty graph on a webpage.
-        The user can select buttons each labeled w/ a programming language, each a different color.
-        First click will call an API request to GitHub and return w/ the # of time that language is selected.
-        language data will be stored in a row in a SQLite table.
-        The graph will be updated via a query to the table.
-        Second click will delete that languages row from the table and update the graph accordingly """
-    
-    lang = "python"
-    
-    # make API call and store response
-    url = "https://api.github.com/search/repositories?q=language:{0}".format(lang)
-    r = requests.get(url)
-    print("Status code:", r.status_code)
-    
-    # store API response in a var
-    response_dict = r.json()
-    
-    # process results
-    print(response_dict.keys())
-    print("Total repositories:", response_dict['total_count'])
-    
-    # Explore info about repositories
-    repo_dicts = response_dict['items']
-    print("Repositories returned:", len(repo_dicts))
-    
-    # Examine the first repo returned
-    repo_dict = repo_dicts[0]
-    print("\nKeys:", len(repo_dict))
-    for key in sorted(repo_dict.keys()):
-        print(key)
+# Create list of all languages used in Github to pass on to html page
+'''TODO'''
 
-if __name__ == "__main__":
-    main()
+# Get lang_name value from html buttons, ON CLICK
+'''TODO'''
+lang_name = request.form.get('lang_name')
+
+# Make an api call and store the response
+url = 'https://api.github.com/search/repositories?q=language:@lang_name&sort=stars'
+r = requests.get(url)
+
+if r.status_code != 200:
+    raise RuntimeError("API Call status not OK")
+
+# Store response in a variable 
+response_dict = r.json()
+
+# print("Total Repositories:", response_dict['total_count'])
+
+# Explore info about repositories
+# repo_dicts = response_dict['items']
+
+# names, stars = [], []
+# for repo_dict in repo_dicts:
+#     names.append(repo_dict['name'])
+#     stars.append(repo_dict['stargazers_count'])
+    
+# print("Repositories returned:", len(repo_dicts))
+
+# print("\nSelected information about each repository:")
+# for repo_dict in repo_dicts:
+#     print("\nName:", repo_dict['name'])
+#     print("Stars:", repo_dict['stargazers_count'])
+
+# # Examine the first repository
+# repo_dict = repo_dicts[0]
+# print("\nKeys:", len(repo_dict))
+# print("Repository Owner Name:", repo_dict['name'])
+# print("Stargazer Count:", repo_dict['stargazers_count'])
+# for key in sorted(repo_dict.keys()):
+#     print(key)
+
+languages = []
+
+# Append info into master_dict
+# Labels: lang_name & sum_stars & average_stars (for now)
+''' TODO '''
+
+# Pass master_dict to index.html & d3 graph using flask
+''' TODO '''
+
+if response_dict['incomplete_results'] != False:
+    raise RuntimeError("'Incomplete Results' is True")
+    
