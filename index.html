@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 
 <html>
+   <html lang="en">
+
     <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
+
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->
+        <meta charset="utf-8"/>
+        <meta content="initial-scale=1, width=device-width" name="viewport"/>
+
+        <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <title>GitHub Language Popularity</title>
+
     </head>
     <body>
         <!-- Need initial placeholder graph --> 
-        <svg id="canvas" height="800px" width="800px"></svg>
-        <script src="display.js"></script>
-
-        <form action="{{ url_for('lookup') }}" method="post">
+        <!--<svg id="canvas" height="800px" width="800px"></svg>-->
+        <!--<script src="display.js"></script>-->
+        
+        <form action="{{ url_for('index') }}" method="get">
             <fieldset>
                 <div class="form-group">
                     <table>
-                        {% for something in sometings %}
-                            <tr>
-                                <td><button type="submit" name=lang_name value="{{ something[loop.index0] }}"></td>
-                            </tr>
-                        {% endfor %}
+                        <tr>
+                            <td><h3>GitHub Language Popularity</h3></td>
+                        </tr>
+                        <tr>
+                            {% for lang in langs %}
+                                <td><button class="button" type="submit" name=lang_name value="{{ langs[loop.index0] }}">{{ langs[loop.index0] }}</td>
+                            {% endfor %}
+                        </tr>
+                    </table>
                 </div>
             </fieldset>
         </form>
