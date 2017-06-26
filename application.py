@@ -1,74 +1,105 @@
 #!/usr/bin/env python3
 
-import os
-import re
-import json
-from flask import Flask, jsonify, render_template, request, url_for
-from flask_jsglue import JSGlue
-import requests
-#import csv
+from cs50 import SQL
+from flask import Flask, jsonify, flash, redirect, render_template, request, session, url_for
+from flask_session import Session
+from tempfile import mkdtemp
 
-from helpers import *
+from helpers import*
 
 # configure application
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def index():
+# ensure responses aren't cached
+if app.config["DEBUG"]:
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
 
-    # Create list of all languages used in Github to pass on to html page
-    langs = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "flask", "go", "golo",\
-        "groovy", "gosu", "haxe", "html", "io", "java", "javascript", "julia", "kotlin", "livescript", "nim", "nu",\
-        "ocaml", "php", "powershell", "purescript", "python", "racket", "red", "ruby", "rust", "swift", "scala",\
-        "terra", "typescript"]
+# configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
+# configure CS50 Library to use SQLite database
+db = SQL("sqlite:///languages.db")
+
+# GLOBALS
+# Create list of all languages used in Github to pass on to html page
+LANGS = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "flask", "go", "golo",\
+"groovy", "gosu", "haxe", "html", "io", "java", "javascript", "julia", "kotlin", "livescript", "nim", "nu",\
+"ocaml", "php", "powershell", "purescript", "python", "racket", "red", "ruby", "rust", "swift", "scala",\
+"terra", "typescript"]
+
+
+@app.route("/", methods = ["GET", "POST"])
+def index():
     
-    # render index.html with language name info
-    return render_template("index.html", langs = langs)
+    # if user reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
     
-    # Get lang_name value from html buttons
-    lang_name = request.form.get('lang_name')
-    
-    # Correct c++ name for search
-    if lang_name == 'c++':
-        lang_name = 'cpp'
+        # Get lang_name value from html buttons on submit
+        lang_name = request.form.get('lang_name')
         
-    # look up language info from GitHub
-    r = lookup(lang_name)
-    
-    # Change C++ back for use in graph
-    if lang_name == 'cpp':
-        lang_name = 'c++'
-     
-    # render stars.html with language name & stars info
-    return render_template("stars.html", lang_name = lang_name, total_stars = r)   
-    
-    # # Store language name and stars data in new csv file
-    # # If csv already exists, append it
-    # if os.path.exists('data.csv'):
-    #     with open('data.csv', 'a', newline='') as csvfile:
-    #         filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    #         filewriter.writerow([current_lang, total_stars])
+        # Correct c++ name for search
+        if lang_name == 'c++':
+            lang_name = 'cpp'
+            
+        # look up language info from GitHub
+        r = lookup(lang_name)
         
-    # else:
-    #     # Create csv file
-    #     with open('data.txt', 'w') as csvfile:
-    #         filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    #         filewriter.writeheader(['Language', 'Stars'])
-    #         filewriter.writerow([current_lang, total_stars])
+        if r == None:
+            return nope("Something","is wrong")
+            
+        # Change C++ back for use in graph
+        if lang_name == 'cpp':
+            lang_name = 'c++'
+         
+        # render stars.html with language name & stars info
+        return render_template("stars.html", LANGS = LANGS, total_stars = r)
         
-    # # Append info into master_dict
-    # # Labels: lang_name & sum_stars(for now)
+    # else if user reached route via GET
+    else:
     
-    # # Create master list of data for graph
-    # # master_list = []
+        # render index.html with language name info
+        return render_template("index.html", LANGS = LANGS)
+        # return nope("got to here")
+        
+# @app.route("/graph", methods=["GET", "POST"])
+# def graph():
     
-    # # Create new dict to append to master_list
-    # # temp_dict = {current_lang, total_stars}
+#     # if user reached route via POST (as by submitting a form via POST)
+#     if request.method == "POST":
     
-    # # master_list.append(temp_dict)
-    
-    # # # Pass master_dict to index.html & d3 graph using flask
-    # # ''' TODO '''
-    
-    
+#         # Get lang_name value from html buttons on submit
+#         lang_name = request.form.get('lang_name')
+        
+#         # Correct c++ name for search
+#         if lang_name == 'c++':
+#             lang_name = 'cpp'
+            
+#         # look up language info from GitHub
+#         r = lookup(lang_name)
+        
+#         if r == None:
+#             return nope("Something","is wrong")
+        
+#         else:
+#             return nope("Something","went right!")
+        
+#         # Change C++ back for use in graph
+#         if lang_name == 'cpp':
+#             lang_name = 'c++'
+         
+#         # render stars.html with language name & stars info
+#         return render_template("graph.html", LANGS = LANGS, total_stars = total_stars)
+        
+#     # else if user reached route via GET
+#     else:
+#         # render graph.html, get data from table
+#         return render_template("graph.html", LANGS = LANGS, total_stars = total_stars)
         
