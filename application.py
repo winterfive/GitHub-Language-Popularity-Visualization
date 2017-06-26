@@ -41,7 +41,7 @@ def index():
     
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-    
+        
         # Get lang_name value from html buttons on submit
         lang_name = request.form.get('lang_name')
         
@@ -58,48 +58,23 @@ def index():
         # Change C++ back for use in graph
         if lang_name == 'cpp':
             lang_name = 'c++'
+            
+        # add data to table
+        '''TODO'''
          
         # render stars.html with language name & stars info
-        return render_template("stars.html", LANGS = LANGS, total_stars = r)
+        return render_template("graph.html", LANGS = LANGS)
         
-    # else if user reached route via GET
+   # else if user reached route via GET (as by clicking a link or via redirect)
+
     else:
+        # display index page w/ paragraph
+        return render_template("index.html")
+
+@app.route('/graph')
+def graph():
+    '''TODO'''
     
-        # render index.html with language name info
-        return render_template("index.html", LANGS = LANGS)
-        # return nope("got to here")
-        
-# @app.route("/graph", methods=["GET", "POST"])
-# def graph():
+    # if, check that table has data, if not, display index
     
-#     # if user reached route via POST (as by submitting a form via POST)
-#     if request.method == "POST":
-    
-#         # Get lang_name value from html buttons on submit
-#         lang_name = request.form.get('lang_name')
-        
-#         # Correct c++ name for search
-#         if lang_name == 'c++':
-#             lang_name = 'cpp'
-            
-#         # look up language info from GitHub
-#         r = lookup(lang_name)
-        
-#         if r == None:
-#             return nope("Something","is wrong")
-        
-#         else:
-#             return nope("Something","went right!")
-        
-#         # Change C++ back for use in graph
-#         if lang_name == 'cpp':
-#             lang_name = 'c++'
-         
-#         # render stars.html with language name & stars info
-#         return render_template("graph.html", LANGS = LANGS, total_stars = total_stars)
-        
-#     # else if user reached route via GET
-#     else:
-#         # render graph.html, get data from table
-#         return render_template("graph.html", LANGS = LANGS, total_stars = total_stars)
-        
+    # else, get data from table, display on graph
