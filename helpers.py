@@ -1,38 +1,31 @@
 #!/usr/bin/python
 
-import csv
-import urllib.request
 from flask import render_template
-
-# from flask import redirect, render_template, request, session, url_for
-# from functools import wraps
+import requests
 
 def lookup(n):
     """Run API call for language selected"""
 
     # query GitHub for info
     # Make an api call and store the response
-    try:
-        url = "https://api.github.com/search/repositories?q=language:{}&sort=stars".format(n)
-        webpage = urllib.request.urlopen(url)
-        datareader = csv.reader(webpage.read().decode("utf-8").splitlines())
-        r = next(datareader)
-    except:
-        return None
-        
-    # ensure file exists
+    url = 'https://api.github.com/search/repos?q=language:{}&sort=stars'.format(n)
+    r = requests.get(url)
+    r.json()
+    
+    # ensure r exists
     try:
         keys = r.keys()
     except:
         return None
         
-    # check response
+    # check r
     if r.status_code != 200:
-        raise RuntimeError("API Call status not OK")
+        raise RuntimeError('API Call status not OK')
         return None
     
     if r['incomplete_results'] != False:
         raise RuntimeError("'Incomplete Results' is True")
+        return None
         
     # Create stars sum variable
     total_stars = 0
@@ -45,8 +38,8 @@ def lookup(n):
     # return total # of stars
     return total_stars
     
-def apology(top="", bottom=""):
-    """Renders message as an apology to user."""
+def nope(top="", bottom=""):
+    """Renders message as an error tracker."""
     def escape(s):
         """
         Escape special characters.
