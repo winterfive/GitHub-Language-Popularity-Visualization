@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Graph
+{% endblock %}
+
+{% block main %}
+    <!-- Placeholder for graph --> 
+    <!--<svg id="canvas" height="800px" width="800px"></svg>-->
+    <!--<script src="display.js"></script>-->
+    
+    <form action="{{ url_for('index') }}">
+        <fieldset>
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <td class="header"><h3>GitHub Language Popularity</h3></td>
+                    </tr>
+                    <tr>
+                        <td class="spacer"></td>
+                    </tr>
+                    <tr>
+                        <td><p>graph goes here</p></td>
+                    </tr>
+                    <tr>
+                        <td class="spacer"></td>
+                    </tr>
+                    <tr>
+                        {% for LANG in LANGS %}
+                            <td><input class="button" type="submit" name="lang_name" value="{{ LANGS[loop.index0] }}"></td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
+
