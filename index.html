@@ -23,8 +23,8 @@
                         <td class="spacer"></td>
                     </tr>
                     <tr>
-                        {% for LANG in LANGS %}
-                            <td><input class="button" type="submit" name="lang_name" value="{{ LANGS[loop.index0] }}"></td>
+                        {% for indexLang in indexLangs %}
+                            <td><input class="button" type="submit" name="lang_name" value="{{ indexLangs[loop.index0] }}"></td>
                         {% endfor %}
                     </tr>
                 </table>
