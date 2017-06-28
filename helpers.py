@@ -2,41 +2,56 @@
 
 from flask import render_template
 import requests
+import csv
+import os.path
+import pathlib
 
 def lookup(n):
     """Run API call for language selected"""
-
+    
     # query GitHub for info
     # Make an api call and store the response
-    url = 'https://api.github.com/search/repos?q=language:{}&sort=stars'.format(n)
+    url = 'https://api.github.com/search/repositories?q=language:{}&sort=stars'.format(n)
     r = requests.get(url)
-    r.json()
+    
+    # check r
+    if r.status_code != 200:
+        raise RuntimeError('API Call status not OK')
+        return 3
+        
+    r = r.json()
     
     # ensure r exists
     try:
         keys = r.keys()
     except:
-        return None
+        return 2
         
-    # check r
-    if r.status_code != 200:
-        raise RuntimeError('API Call status not OK')
-        return None
-    
     if r['incomplete_results'] != False:
         raise RuntimeError("'Incomplete Results' is True")
-        return None
+        return 4
         
     # Create stars sum variable
     total_stars = 0
-        
+    
     # Create and store total # of stars in variable, total_stars
-    items = r['items']
-    for item in items:
-        total_stars += int(items['stargazers_count'])
+    repo_dicts = r['items']
+    for repo_dict in repo_dicts:
+        total_stars += int(repo_dict['stargazers_count'])
+        
+    # write data to csv file
+    ofile = open('data.csv', "a")
+    writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+    
+    # write specific info into csv
+    writer.writerow([n , total_stars])
+     
+    # ifile.close()
+    ofile.close()
         
     # return total # of stars
-    return total_stars
+    # return total_stars
+    return
     
 def nope(top="", bottom=""):
     """Renders message as an error tracker."""
@@ -51,3 +66,9 @@ def nope(top="", bottom=""):
             s = s.replace(old, new)
         return s
     return render_template("nope.html", top=escape(top), bottom=escape(bottom))
+    
+def erase_csv():
+    """Erases all data from csv file"""
+    f = open("data.csv", "w")
+    f.truncate()
+    f.close()
