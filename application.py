@@ -4,6 +4,8 @@ from cs50 import SQL
 from flask import Flask, jsonify, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 from helpers import *
 
@@ -25,15 +27,12 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# configure CS50 Library to use SQLite database
-db = SQL("sqlite:///data.db")
-
 # GLOBALS
 # Create list of all languages used in Github to pass on to html page
 LANGS = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "flask", "go", "golo",\
 "groovy", "gosu", "haxe", "html", "io", "java", "javascript", "julia", "kotlin", "livescript", "nim", "nu",\
 "ocaml", "php", "powershell", "purescript", "python", "racket", "red", "ruby", "rust", "swift", "scala",\
-"terra", "typescript"]
+"terra", "typescript", "RELOAD"]
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -51,24 +50,22 @@ def index():
         # look up language info from GitHub
         r = lookup(lang_name)
         
-        if r == None:
-            return nope('Something','is wrong')
+        if r == 2:
+            return nope('2')
             
-        # Change C++ back for use in graph
-        if lang_name == 'cpp':
-            lang_name = 'c++'
-            
-        # add data to table
-        db.execute('INSERT INTO languages (langName, totalStars) VALUES(:name, :stars)',\
-            name = lang_name,\
-            stars = r)
+        if r == 3:
+            return nope('3')
+        
+        if r == 4:
+            return nope('4')
             
         return render_template('graph.html', LANGS = LANGS)
     
     else:
-        return render_template('index.html', LANGS = LANGS)
+        indexLangs = LANGS[:-1]
+        return render_template('index.html', indexLangs = indexLangs)
 
-@app.route('/graph', methods = ['GET', 'POST'])
+@app.route('/graph', methods=['POST'])
 def graph():
     
     # if user reached route via POST (as by submitting a form via POST)
@@ -81,40 +78,15 @@ def graph():
         if lang_name == 'c++':
             lang_name = 'cpp'
             
-        # look up language info from GitHub
+        if lang_name == 'RELOAD':
+            erase_csv()
+            indexLangs = LANGS[:-1]
+            return render_template('index.html', indexLangs = indexLangs)
+            
+        # look up language info from GitHub, add data to csv
         r = lookup(lang_name)
         
-        if r == None:
-            return nope('Something','is wrong')
-            
-        # Change C++ back for use in graph
-        if lang_name == 'cpp':
-            lang_name = 'c++'
-            
-        # add data to table
-        # check if selected language is already in table
-        # if so, copy over old data
-        
-        db.execute('INSERT INTO languages (langName, totalStars) VALUES(:name, :stars)',\
-            name = lang_name,\
-            stars = r)
-        
-        # get data from table
-        '''TODO'''
-        
-        # format data, if needed, to pass to graph
-        '''TODO'''
-        
-        # display graph
-        '''TODO'''
-        
-    else:
-        # get current data from table
-        '''TODO'''
-        
-        # format data, if needed, to pass to graph
-        '''TODO'''
-        
-        # display graph with data from table
         return render_template('graph.html', LANGS = LANGS)
         
+    else:
+        return render_template('graph.html', LANGS = LANGS)
