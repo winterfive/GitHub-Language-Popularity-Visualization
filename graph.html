@@ -5,11 +5,10 @@
 {% endblock %}
 
 {% block main %}
-    <!-- Placeholder for graph --> 
-    <!--<svg id="canvas" height="800px" width="800px"></svg>-->
-    <!--<script src="display.js"></script>-->
+
+    <script src="static/display.js"></script>
     
-    <form action="{{ url_for('index') }}">
+    <form action="{{ url_for('graph') }}" method='POST'>
         <fieldset>
             <div class="form-group">
                 <table>
@@ -20,7 +19,7 @@
                         <td class="spacer"></td>
                     </tr>
                     <tr>
-                        <td><p>graph goes here</p></td>
+                        <td><svg id="canvas" height="400px" width="800px" alt="Graph with Github Language Popularity"></svg></td>
                     </tr>
                     <tr>
                         <td class="spacer"></td>
@@ -30,6 +29,13 @@
                             <td><input class="button" type="submit" name="lang_name" value="{{ LANGS[loop.index0] }}"></td>
                         {% endfor %}
                     </tr>
+                    <tr>
+                        <td class="spacer"></td>
+                    </tr>
+                    <tr>
+                        <td>To erase your plot and start over, please click the RELOAD button.</td>
+                    </tr>
+                    
                 </table>
             </div>
         </fieldset>
