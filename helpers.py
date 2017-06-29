@@ -39,6 +39,9 @@ def lookup(n):
     for repo_dict in repo_dicts:
         total_stars += int(repo_dict['stargazers_count'])
         
+    # get average stars per repository
+    total_stars = round(total_stars / 30)
+        
     # write data to csv file
     ofile = open('data.csv', "a")
     writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
