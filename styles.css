@@ -1,0 +1,111 @@
+html, body
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-image: url("noisy_grid.png");
+    background-repeat: repeat;
+    height: 100%;
+}
+
+.container
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: #fff;
+    min-height: 100%;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main img
+{
+    max-width: 100%; /* constrain images on small screens */
+}
+
+svg 
+{
+	background-color: inherit;
+}
+
+.header
+{
+    padding-top: 50px;
+    margin: auto;
+}
+
+.spacer
+{
+    height: 28px;
+    width: 100%;
+}
+
+p
+{
+    text-align: left;
+}
+
+table
+{
+    margin: auto;
+    max-width: 800px;
+    display: inline-block;
+    padding-bottom: 100px;
+}
+
+tr {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+td, th
+{
+    text-align: center;
+    padding: 4px;
+    border-color: #696c5e;
+    vertical-align: middle;
+}
+
+.button
+{
+    padding: 12px;
+    border-radius: 14px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    -moz-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    border: 1px white solid;
+}
+
+.button:hover
+{
+    background-color: #357a38;
+}
+
+.button:active 
+{
+    position: relative;
+    top: 1px;
+}
+
+input[value="RELOAD"] 
+{
+    background-color: #af504c; /* Green */
+}
+
+input[value="RELOAD"]:hover
+{
+    background-color: #7a3835;
+}
