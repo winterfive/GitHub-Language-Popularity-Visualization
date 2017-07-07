@@ -1,34 +1,43 @@
-'''TODO'''
-
-//Width and height
+// Width & Height
 var w = 700;
-var h = 300;
+var h = 500;
+var barPadding = 3;
+   
+d3.csv("static/data.csv", function(dataset) {
+    
+    var svg = d3.select("td")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+    
+    svg.selectAll("rect")
+    .data(dataset)
+    .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return i * (w / dataset.length); 
+        })
+        .attr("y",  function(d) {
+            return h - d.stars;
+        })
+        .attr("width", w / dataset.length - barPadding)
+        .attr("height", function(d) {
+            return d.stars;
+        })
+        .attr("fill", "#999");
+        
+    canvas.selectAll("text")
+        .data(dataset)
+        .enter()
+            .append("text")
+            .attr("fill", "white")
+            .attr("y",  function(d) {
+                return h - d.stars + 5;
+            })
+            .text(function (d) {
+                return d.langName;
+            });
+});  
 
-// var dataset = [];
-
-// Convert csv to d3 dataset
-d3.csv("data.csv", function(data) {
-  console.log(data[0]);
-});
-
-dataset = "data.csv";
-
-//Create SVG element
-var svg = d3.select("plot")
-			.append("svg")
-			.attr("width", w)
-			.attr("height", h);
-
-svg.selectAll("circle")
-   .data(dataset)
-   .enter()
-   .append("circle")
-   .attr("cx", function(d) {
-		return d.x;
-   })
-   .attr("cy", function(d) {
-	   return d.y;
-   })
-   .attr("r", function(d) {
-	   return d.r;
-   });
+    
+    
