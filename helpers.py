@@ -46,20 +46,28 @@ def lookup(n):
     # get average stars per repository
     total_stars = round(total_stars / 30)
     
-     # check if table exists already, if not, create
-    db.execute("CREATE TABLE IF NOT EXISTS githubData ('langNames' CHAR(20) UNIQUE, 'stars' INTEGER)")
+    # if n is cpp, change to c++
+    if n == "cpp":
+        n = "c++"
+    
+    # check if table exists already, if not, create
+    db.execute("CREATE TABLE IF NOT EXISTS githubData (langName CHAR(20) UNIQUE, stars INTEGER)")
     
     # place new data in sqlite table
-    db.execute("INSERT OR REPLACE INTO githubData (langNames, stars) VALUES(:langNames, :stars)",\
-        langNames = n,\
+    db.execute("INSERT OR REPLACE INTO githubData (langName, stars) VALUES(:langName, :stars)",\
+        langName = n,\
         stars = total_stars)
     
-    # get csv from sqlite table to pass to d3 script
-    langInfos = db.execute("SELECT * FROM githubData")
-    with open("data.csv", "w") as f:
-        writer = csv.writer(f)
-        # writer.writerow(["langNames", "stars"])
-        writer.writerow(langInfos)
+    # fill json cs via sqlite table
+    items = db.execute("SELECT * FROM githubData")
+    
+    '''yes, I know data.csv doesn't belong in static but I cannot make
+    changes to the web container so I have to do it this way for this assignment'''
+    with open("static/data.csv", "wt", newline="") as f:
+        writer = csv.DictWriter(f, ["langName", "stars"])
+        writer.writeheader()
+        for item in items:
+            writer.writerow(item)
     
     return
     
@@ -85,7 +93,8 @@ def erase_csv():
     db.execute("DELETE FROM githubData")
     
     # delete data from csv file
-    f = open("data.csv", "r+")
+    f = open("static/data.csv", "r+")
     f.truncate()
     f.close()
+    
     
