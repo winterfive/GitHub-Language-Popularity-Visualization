@@ -4,8 +4,6 @@ from cs50 import SQL
 from flask import Flask, jsonify, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
-# import numpy as np
-# import matplotlib.pyplot as plt
 
 from helpers import *
 
@@ -29,64 +27,65 @@ Session(app)
 
 # GLOBALS
 # Create list of all languages used in Github to pass on to html page
-LANGS = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "flask", "go", "golo",\
+# removed flask
+LANGS = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "go", "golo",\
 "groovy", "gosu", "haxe", "html", "io", "java", "javascript", "julia", "kotlin", "livescript", "nim", "nu",\
 "ocaml", "php", "powershell", "purescript", "python", "racket", "red", "ruby", "rust", "swift", "scala",\
 "terra", "typescript", "RELOAD"]
 
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/', methods = ["GET", "POST"])
 def index():
     
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         
         # Get lang_name value from html buttons on submit
-        lang_name = request.form.get('lang_name')
+        lang_name = request.form.get("lang_name")
         
         # Correct c++ name for search
-        if lang_name == 'c++':
-            lang_name = 'cpp'
+        if lang_name == "c++":
+            lang_name = "cpp"
             
         # look up language info from GitHub
         r = lookup(lang_name)
         
         if r == 2:
-            return nope('2')
+            return nope("2")
             
         if r == 3:
-            return nope('3')
+            return nope("3")
         
         if r == 4:
-            return nope('4')
+            return nope("4")
             
-        return render_template('graph.html', LANGS = LANGS)
+        return render_template("graph.html", LANGS = LANGS)
     
     else:
         indexLangs = LANGS[:-1]
-        return render_template('index.html', indexLangs = indexLangs)
+        return render_template("index.html", indexLangs = indexLangs)
 
-@app.route('/graph', methods=['POST'])
+@app.route("/graph", methods=["POST"])
 def graph():
     
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         
         # Get lang_name value from html buttons on submit
-        lang_name = request.form.get('lang_name')
+        lang_name = request.form.get("lang_name")
         
         # Correct c++ name for search
-        if lang_name == 'c++':
-            lang_name = 'cpp'
+        if lang_name == "c++":
+            lang_name = "cpp"
             
-        if lang_name == 'RELOAD':
+        if lang_name == "RELOAD":
             erase_csv()
             indexLangs = LANGS[:-1]
-            return render_template('index.html', indexLangs = indexLangs)
+            return render_template("index.html", indexLangs = indexLangs)
             
         # look up language info from GitHub, add data to csv
         r = lookup(lang_name)
         
-        return render_template('graph.html', LANGS = LANGS)
+        return render_template("graph.html", LANGS = LANGS)
         
     else:
-        return render_template('graph.html', LANGS = LANGS)
+        return render_template("graph.html", LANGS = LANGS)
