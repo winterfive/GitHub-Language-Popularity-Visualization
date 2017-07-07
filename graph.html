@@ -7,6 +7,7 @@
 {% block main %}
 
     <script src="static/display.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
     
     <form action="{{ url_for('graph') }}" method='POST'>
         <fieldset>
@@ -16,10 +17,7 @@
                         <td class="header"><h3>GitHub Language Popularity</h3></td>
                     </tr>
                     <tr>
-                        <td class="spacer"></td>
-                    </tr>
-                    <tr>
-                        <td><script type="text/javascript"></script></td>
+                        <td><script src = "static/display.js" type="text/javascript"></script></td>
                     </tr>
                     <tr>
                         <td class="spacer"></td>
