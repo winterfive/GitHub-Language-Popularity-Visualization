@@ -7,6 +7,7 @@ html, body
     background-image: url("noisy_grid.png");
     background-repeat: repeat;
     height: 100%;
+    font-family: sans-serif;
 }
 
 .container
@@ -102,10 +103,14 @@ td, th
 
 input[value="RELOAD"] 
 {
-    background-color: #af504c; /* Green */
+    background-color: #af504c;
 }
 
 input[value="RELOAD"]:hover
 {
     background-color: #7a3835;
+}
+
+svg {
+    background-color: white;
 }
