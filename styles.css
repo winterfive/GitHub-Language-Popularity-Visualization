@@ -59,7 +59,7 @@ p
 table
 {
     margin: auto;
-    max-width: 800px;
+    max-width: 700px;
     display: inline-block;
     padding-bottom: 100px;
 }
@@ -113,4 +113,24 @@ input[value="RELOAD"]:hover
 
 svg {
     background-color: white;
+}
+
+.chart text {
+  color: white;
+  font: 11px sans-serif;
+  /*text-anchor: end;*/
+}
+
+.axis path,.axis line {
+	color: black;
+}
+
+.axis text {
+	font-family: sans-serif;
+	font-size: 12px;
+	color: blue;
+}
+
+.axis.x {
+	font-weight: bold;
 }
