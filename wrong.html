@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Nope
+{% endblock %}
+
+{% block main %}
+        <title>Nope</title>
+        <form action="{{ url_for('wrong') }}" method='POST'>
+            <fieldset>
+                <div class="form-group">
+                    <table>
+                        <tr>
+                        <td class="spacer"></td>
+                        </tr>
+                        <tr>
+                            <td><img alt="No results for your search. Please try again" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=http://i.imgur.com/A3ZR65I.png"/></td>
+                        </tr>
+                        <tr>
+                        <td class="spacer"></td>
+                        </tr>
+                        <tr>
+                            <td><input class="button" type="submit" name="name" value="Return"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </fieldset>
+        </form>
+{% endblock %}
