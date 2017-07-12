@@ -4,6 +4,7 @@ from flask import render_template
 from cs50 import SQL
 import requests
 import csv
+import time
 # import os.path
 # import pathlib
 
@@ -19,9 +20,9 @@ def lookup(n):
     r = requests.get(url)
     
     # check r
-    if r.status_code != 200:
+    if r.status_code is not 200:
         raise RuntimeError("API Call status not OK")
-        return 3
+        return 2
         
     r = r.json()
     
@@ -29,10 +30,9 @@ def lookup(n):
     try:
         keys = r.keys()
     except:
-        return 2
+        return 3
         
-    if r["incomplete_results"] != False:
-        raise RuntimeError("Incomplete Results is True")
+    if r["incomplete_results"] is False:
         return 4
         
     # Create stars sum variable
@@ -83,7 +83,7 @@ def nope(top="", bottom=""):
             ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
             s = s.replace(old, new)
         return s
-    return render_template("nope.html", top=escape(top), bottom=escape(bottom))
+    return render_template("wrong.html", top=escape(top), bottom=escape(bottom))
     
 def erase_csv():
     """Erases all data from sqlite table"""
@@ -95,6 +95,4 @@ def erase_csv():
     # delete data from csv file
     f = open("static/data.csv", "r+")
     f.truncate()
-    f.close()
-    
-    
+    f.close()    
