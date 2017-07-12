@@ -27,7 +27,6 @@ Session(app)
 
 # GLOBALS
 # Create list of all languages used in Github to pass on to html page
-# removed flask
 LANGS = ["chapel", "clojure", "coffeescript", "c++", "crystal", "csharp", "css", "factor", "go", "golo",\
 "groovy", "gosu", "haxe", "html", "io", "java", "javascript", "julia", "kotlin", "livescript", "nim", "nu",\
 "ocaml", "php", "powershell", "purescript", "python", "racket", "red", "ruby", "rust", "swift", "scala",\
@@ -49,14 +48,9 @@ def index():
         # look up language info from GitHub
         r = lookup(lang_name)
         
-        if r == 2:
-            return nope("2")
-            
-        if r == 3:
-            return nope("3")
-        
-        if r == 4:
-            return nope("4")
+        # check r for response code
+        if r is 2 or 3 or 4:
+            return nope("No" , "results")
             
         return render_template("graph.html", LANGS = LANGS)
     
@@ -85,7 +79,23 @@ def graph():
         # look up language info from GitHub, add data to csv
         r = lookup(lang_name)
         
+        # if r is 3 or 4:
+        #     return nope("No" , "results")
+        
+        # if r == 5:
+        #     return nope("Slow down" , "there's an API CALL rate limit ya know")
+        
         return render_template("graph.html", LANGS = LANGS)
         
+    else:
+        return render_template("graph.html", LANGS = LANGS)
+        
+@app.route("/wrong", methods=["POST"])
+def wrong():
+    
+    check = db.execute("SELECT * FROM githubData")
+    
+    if check == None:
+        return render_template("index.html", LANGS = LANGS)
     else:
         return render_template("graph.html", LANGS = LANGS)
