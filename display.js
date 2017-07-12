@@ -2,14 +2,29 @@
 var w = 700;
 var h = 500;
 var barPadding = 3;
-   
+
+
 d3.csv("static/data.csv", function(dataset) {
+    dataset.forEach(function(d) {
+        d.stars = +d.stars;
+        console.log(dataset);
+        });
     
     var svg = d3.select("td")
     .append("svg")
     .attr("width", w)
     .attr("height", h);
     
+    // find max stars value to scale graph
+    var max = d3.max(dataset, function(d) {
+        return d.stars;
+    });
+    
+    var scale = d3.scaleLinear()
+        .domain([0, max])
+        .range([0, h]);
+    
+    // bars
     svg.selectAll("rect")
     .data(dataset)
     .enter()
@@ -17,26 +32,26 @@ d3.csv("static/data.csv", function(dataset) {
     .attr("x", function(d, i) {
         return i * (w / dataset.length); 
     })
-    .attr("y",  function(d) {
-        return h - d.stars;
+    .attr("y", function(d) {
+        return h - scale(d.stars);
     })
     .attr("width", w / dataset.length - barPadding)
     .attr("height", function(d) {
         return d.stars;
     })
-    .attr("fill", "#e9e2da");
+    .attr("fill", "#c9e7ca");
         
+    // bar labels
     svg.selectAll("text")
         .data(dataset)
         .enter()
         .append("text")
         .attr("fill", "black")
         .text(function (d) {
-            return d.langName;
+            return (d.langName + " - " + d.stars);
         })
         .attr("transform", function(d,i) {
-        var xText = i * (w / dataset.length) + 20;
-        // var yText = h - yScale(d.v);
+        var xText = i * (w / dataset.length) + 18;
         var yText = h - 15;
         return "translate(" + xText + "," + yText + "), rotate(-90)";
       });
