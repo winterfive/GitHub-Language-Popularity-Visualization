@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+''' 
+Github Language Popularity App by Lee Gainer, July 2017
+Final project for Harvard cs50
+    
+This app uses current data from Github accessed via RESTful API
+to evaluate the poplarity of various programming languages.
+'''
+
 from cs50 import SQL
 from flask import Flask, jsonify, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
@@ -49,8 +57,20 @@ def index():
         r = lookup(lang_name)
         
         # check r for response code
-        if r is 2 or 3 or 4:
-            return nope("No" , "results")
+        if r is 2:
+            return nope("No" , "404, Not Found")
+            
+        if r is 3:
+            return nope("slow down" , "there's a rate limit ya know")
+            
+        if r is 4:
+            return nope("No" , "Keys")
+            
+        if r is 5:
+            return nope("No" , "Incomplete Results is True")
+            
+        # if r is 5 or 6:
+        #     return nope("Slow down" , "there's an API CALL rate limit ya know")
             
         return render_template("graph.html", LANGS = LANGS)
     
@@ -79,11 +99,18 @@ def graph():
         # look up language info from GitHub, add data to csv
         r = lookup(lang_name)
         
-        # if r is 3 or 4:
-        #     return nope("No" , "results")
-        
-        # if r == 5:
-        #     return nope("Slow down" , "there's an API CALL rate limit ya know")
+        # check r for response code
+        if r is 2:
+            return nope("No" , "404, Not Found")
+            
+        if r is 3:
+            return nope("slow down" , "there's a rate limit ya know")
+            
+        if r is 4:
+            return nope("No" , "Keys")
+            
+        if r is 5:
+            return nope("No" , "Incomplete Results is True")
         
         return render_template("graph.html", LANGS = LANGS)
         
