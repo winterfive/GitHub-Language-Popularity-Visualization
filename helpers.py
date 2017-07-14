@@ -20,20 +20,23 @@ def lookup(n):
     r = requests.get(url)
     
     # check r
-    if r.status_code is not 200:
-        raise RuntimeError("API Call status not OK")
+    if r.status_code is 404:
+        raise RuntimeError("404 Not Found")
         return 2
-        
+    
+    if r.status_code is 403:
+        return 3
+    
     r = r.json()
     
     # ensure r exists
     try:
         keys = r.keys()
     except:
-        return 3
-        
-    if r["incomplete_results"] is False:
         return 4
+        
+    if r["incomplete_results"] is True:
+        return 5
         
     # Create stars sum variable
     total_stars = 0
@@ -95,4 +98,6 @@ def erase_csv():
     # delete data from csv file
     f = open("static/data.csv", "r+")
     f.truncate()
-    f.close()    
+    f.close()
+    
+    
