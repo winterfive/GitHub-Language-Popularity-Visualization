@@ -2,7 +2,7 @@
 var w = 700;
 var h = 500;
 var barPadding = 3;
-
+var color = ["#c2e5ec", "#ecc9c2", "#c2ecde", "#e5ecc2"];
 
 d3.csv("static/data.csv", function(dataset) {
     dataset.forEach(function(d) {
@@ -39,7 +39,9 @@ d3.csv("static/data.csv", function(dataset) {
     .attr("height", function(d) {
         return d.stars;
     })
-    .attr("fill", "#c9e7ca");
+    .attr("fill", function(d, i) {
+        return color[i % 4];
+    });
         
     // bar labels
     svg.selectAll("text")
