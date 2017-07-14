@@ -60,14 +60,8 @@ def index():
         if r is 2:
             return nope("No" , "404, Not Found")
             
-        if r is 3:
+        if r is 3 or 4 or 5:
             return nope("slow down" , "there's a rate limit ya know")
-            
-        if r is 4:
-            return nope("No" , "Keys")
-            
-        if r is 5:
-            return nope("No" , "Incomplete Results is True")
             
         # if r is 5 or 6:
         #     return nope("Slow down" , "there's an API CALL rate limit ya know")
@@ -100,17 +94,12 @@ def graph():
         r = lookup(lang_name)
         
         # check r for response code
+        # check r for response code
         if r is 2:
             return nope("No" , "404, Not Found")
             
-        if r is 3:
+        if r is 3 or 4 or 5:
             return nope("slow down" , "there's a rate limit ya know")
-            
-        if r is 4:
-            return nope("No" , "Keys")
-            
-        if r is 5:
-            return nope("No" , "Incomplete Results is True")
         
         return render_template("graph.html", LANGS = LANGS)
         
