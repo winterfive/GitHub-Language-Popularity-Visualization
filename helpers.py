@@ -35,8 +35,11 @@ def lookup(n):
     except:
         return 4
         
-    if r["incomplete_results"] is True:
+    if len(keys) is not 3:
         return 5
+        
+    if r["incomplete_results"] is True:
+        return 6
         
     # Create stars sum variable
     total_stars = 0
