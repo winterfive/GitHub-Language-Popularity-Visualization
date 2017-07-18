@@ -60,8 +60,17 @@ def index():
         if r is 2:
             return nope("No" , "404, Not Found")
             
-        if r is 3 or 4 or 5:
-            return nope("slow down" , "there's a rate limit ya know")
+        if r is 3:
+            return nope("slow down" , "403")
+            
+        if r is 4:
+            return nope("No" , "keys")
+            
+        if r is 5:
+            return nope("No" , "3 keys")
+            
+        if r is 6:
+            return nope("No" , "incomplete results")
             
         # if r is 5 or 6:
         #     return nope("Slow down" , "there's an API CALL rate limit ya know")
@@ -98,8 +107,17 @@ def graph():
         if r is 2:
             return nope("No" , "404, Not Found")
             
-        if r is 3 or 4 or 5:
-            return nope("slow down" , "there's a rate limit ya know")
+        if r is 3:
+            return nope("slow down" , "403")
+            
+        if r is 4:
+            return nope("No" , "keys")
+            
+        if r is 5:
+            return nope("No" , "3 keys")
+            
+        if r is 6:
+            return nope("No" , "incomplete results")
         
         return render_template("graph.html", LANGS = LANGS)
         
