@@ -103,7 +103,6 @@ def graph():
         r = lookup(lang_name)
         
         # check r for response code
-        # check r for response code
         if r is 2:
             return nope("No" , "404, Not Found")
             
